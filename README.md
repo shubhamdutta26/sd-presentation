@@ -1,23 +1,25 @@
-# <%= title %> Format
+# Custom Revealjs Format
 
 ## Installing
 
-*TODO*: Replace the `<github-organization>` with your GitHub organization.
+This [Quarto](quarto.org) extension can be installed/used using the following command:
 
 ```bash
-quarto use template <github-organization>/<%= filesafename %>
+quarto install extension shubhamdutta26/sd-presentation
 ```
 
 This will install the extension and create an example qmd file that you can use as a starting place for your article.
 
 ## Using
 
-*TODO*: Describe how to use your format.
+```bash
+quarto use template shubhamdutta26/sd-presentation
+```
 
 ## Format Options
 
-*TODO*: If your format has options that can be set via document metadata, describe them.
+TBD
 
 ## Example
 
-Here is the source code for a minimal sample document: [example.qmd](example.qmd).
+Here is the source code for a minimal sample document: [template.qmd](template.qmd).

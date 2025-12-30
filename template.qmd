@@ -1,0 +1,792 @@
+---
+format:
+  sd-presentation-revealjs: default
+---
+
+#  {background-image="img/1IGT_color.png" background-opacity="0.2"}
+
+[Developing a duobody for<br>treating Alzheimer's disease<br>in squirrel monkeys]{.custom-title}
+
+[Shubham Dutta, Ph.D.]{.custom-author}
+
+<br>
+
+[The Non Human Primate Reagent Resource]{.custom-url-nhprr}
+
+<br>
+
+[Massbiologics of UMMS]{.custom-url-mbl}
+
+[`r format(Sys.Date(), format="%B %d, %Y")`]{.title-date}
+
+[Background image: [Structure of murine immunoglobulin (1IGT)](http://doi.org/10.2210/pdb1IGT/pdb)]{.custom-aside}
+
+::: notes
+`r if (format(Sys.time(), "%H") < 12) {   "Good morning" } else {   "Good afternoon" }` everyone. Thank you for the opportunity to present my work here. My name is Shubham Dutta, and I’m excited to share with you a unique and ongoing project where I have developed a duobody for treating Alzheimer’s disease in squirrel monkeys.
+:::
+
+## Welcome
+
+```{r}
+#| label: setup
+#| eval: true
+#| echo: true
+
+library(ggplot2)
+library(dplyr)
+library(ggtext)
+library(sdtools)
+library(drc)
+library(purrr)
+
+sd_colors <- c(
+  green   = "#00a5a6",
+  pink    = "#e03d90",
+  orange  = "#fc6538",
+  purple  = "#6a3ecb",
+  blue    = "#0058dc",
+  brown   = "#a75237"
+)
+
+custom_theme <- function(type = "light") {
+  base <- if (type == "light") {
+    theme_bw(base_size = 12, paper = "#F2F0E3", ink = "#2E2E2E")
+  } else {
+    theme_bw(base_size = 12, paper = "#1F1F1F", ink = "#D1CFC0")
+  }
+
+  text_color <- if_else (type == "light", "#2E2E2E", "#D1CFC0")
+
+  base +
+    theme(
+      legend.position = "none",
+      text = element_text(colour = text_color, family = "Open Sans"),
+      axis.title.y = element_markdown(size = 20),
+      axis.title.x = element_markdown(size = 20),
+      plot.title = element_textbox_simple(
+        size = rel(5),
+        face = "bold",
+        family = "Open Sans",
+        lineheight = 1.3,
+        margin = margin(0.5, 0, 1, 0, "lines")
+      ),
+      plot.subtitle = element_textbox_simple(
+        family = "Open Sans",
+        size = rel(2),
+        lineheight = 1.3,
+        margin = margin(0, 0, 1, 0, "lines")
+      ),
+      strip.text = element_text(
+        family = "Open Sans",
+        size = rel(2),
+        face = "bold",
+        margin = margin(2, 0, 1, 0, "lines"),
+        hjust = 0
+      ),
+      strip.background = element_rect(fill = NA, color = NA),
+      axis.text = element_text(size = 15),
+      plot.title.position = "plot",
+      panel.spacing = unit(2, "lines"),
+      plot.margin = margin(1, 2, 1, 1, "lines")
+    )
+}
+```
+
+## Welcome {.dark}
+
+```{r}
+#| label: setup-2
+#| eval: false
+#| echo: true
+
+library(ggplot2)
+library(dplyr)
+library(ggtext)
+library(sdtools)
+library(drc)
+library(purrr)
+
+sd_colors <- c(
+  green   = "#00a5a6",
+  pink    = "#e03d90",
+  orange  = "#fc6538",
+  purple  = "#6a3ecb",
+  blue    = "#0058dc",
+  brown   = "#a75237"
+)
+
+custom_theme <- function(type = "light") {
+  base <- if (type == "light") {
+    theme_bw(base_size = 12, paper = "#F2F0E3", ink = "#2E2E2E")
+  } else {
+    theme_bw(base_size = 12, paper = "#1F1F1F", ink = "#D1CFC0")
+  }
+
+  text_color <- if_else (type == "light", "#2E2E2E", "#D1CFC0")
+
+  base +
+    theme(
+      legend.position = "none",
+      text = element_text(colour = text_color, family = "Open Sans"),
+      axis.title.y = element_markdown(size = 20),
+      axis.title.x = element_markdown(size = 20),
+      plot.title = element_textbox_simple(
+        size = rel(5),
+        face = "bold",
+        family = "Open Sans",
+        lineheight = 1.3,
+        margin = margin(0.5, 0, 1, 0, "lines")
+      ),
+      plot.subtitle = element_textbox_simple(
+        family = "Open Sans",
+        size = rel(2),
+        lineheight = 1.3,
+        margin = margin(0, 0, 1, 0, "lines")
+      ),
+      strip.text = element_text(
+        family = "Open Sans",
+        size = rel(2),
+        face = "bold",
+        margin = margin(2, 0, 1, 0, "lines"),
+        hjust = 0
+      ),
+      strip.background = element_rect(fill = NA, color = NA),
+      axis.text = element_text(size = 15),
+      plot.title.position = "plot",
+      panel.spacing = unit(2, "lines"),
+      plot.margin = margin(1, 2, 1, 1, "lines")
+    )
+}
+```
+
+## Agenda
+
+::: {.incremental .highlight-last}
+- thing 1
+- thing 2
+:::
+
+## Agenda {.dark}
+
+::: {.incremental .highlight-last}
+- thing 1
+- thing 2
+:::
+
+##
+
+```{r}
+#| label: bar-plot-data
+#| eval: true
+
+plot_data <- ToothGrowth |>
+  mutate(
+    supplement = case_when(
+      supp == "OJ" ~ "green",
+      supp == "VC" ~ "pink",
+      TRUE ~ as.character(supp)
+    )
+  ) |>
+  group_by(supplement, dose) |>
+  summarise(mean_length = mean(len), .groups = "drop") |>
+  mutate(
+    categorical_dose = factor(dose),
+    dose_label = paste0(dose, "mg/day")
+  )
+```
+
+```{r}
+#| label: horizontal-bar-plot
+#| fig-height: 10
+#| fig-width: 15
+
+ggplot(
+  plot_data,
+  aes(x = categorical_dose, y = mean_length, fill = supplement)
+) +
+  geom_bar(aes(alpha = dose), stat = "identity", colour = "#FFFFFF", size = 2) +
+  geom_textbox(
+    data = plot_data,
+    aes(
+      label = paste0(
+        "<span style=font-size:12pt>",
+        dose_label,
+        "</span><br>",
+        janitor::round_half_up(mean_length),
+        "mm"
+      ),
+      hjust = if_else(mean_length < 15, 0, 1),
+      halign = if_else(mean_length < 15, 0, 1),
+      colour = if_else(
+        mean_length > 15,
+        "#FFFFFF",
+        sd_colors[supplement]
+      )
+    ),
+    size = 6,
+    fill = NA,
+    box.colour = NA,
+    family = "Cabin",
+    fontface = "bold"
+  ) +
+  labs(
+    x = "Dose",
+    y = "Mean length (mm)",
+    title = paste0(
+      "This is **<span style='color:",
+      sd_colors["green"],
+      "'>green</span>** and that is **<span style='color:",
+      sd_colors["pink"],
+      "'>pink</span>**"
+    ),
+    subtitle = "With the highest dose, the mean recorded length was almost identical."
+  ) +
+  scale_fill_manual(values = sd_colors) +
+  scale_alpha(range = c(0.4, 1)) +
+  scale_colour_identity() +
+  scale_x_discrete(
+    breaks = c("0.5", "1", "2"),
+    labels = function(x) paste0(x, " mg/day")
+  ) +
+  scale_y_continuous(expand = expansion(0), limits = c(0, 30)) +
+  coord_flip() +
+  facet_wrap(supplement ~ ., ncol = 1) +
+  custom_theme("light")
+```
+
+##  {.dark}
+
+```{r}
+#| label: horizontal-bar-plot-dark
+#| fig-height: 10
+#| fig-width: 15
+
+ggplot(
+  plot_data,
+  aes(x = categorical_dose, y = mean_length, fill = supplement)
+) +
+  geom_bar(aes(alpha = dose), stat = "identity", colour = "#FFFFFF", size = 2) +
+  geom_textbox(
+    data = plot_data,
+    aes(
+      label = paste0(
+        "<span style=font-size:12pt>",
+        dose_label,
+        "</span><br>",
+        janitor::round_half_up(mean_length),
+        "mm"
+      ),
+      hjust = if_else(mean_length < 15, 0, 1),
+      halign = if_else(mean_length < 15, 0, 1),
+      colour = if_else(
+        mean_length > 15,
+        "#FFFFFF",
+        sd_colors[supplement]
+      )
+    ),
+    size = 6,
+    fill = NA,
+    box.colour = NA,
+    family = "Cabin",
+    fontface = "bold"
+  ) +
+  labs(
+    x = "Dose",
+    y = "Mean length (mm)",
+    title = paste0(
+      "This is **<span style='color:",
+      sd_colors["green"],
+      "'>green</span>** and that is **<span style='color:",
+      sd_colors["pink"],
+      "'>pink</span>**"
+    ),
+    subtitle = "With the highest dose, the mean recorded length was almost identical."
+  ) +
+  scale_fill_manual(values = sd_colors) +
+  scale_alpha(range = c(0.4, 1)) +
+  scale_colour_identity() +
+  scale_x_discrete(
+    breaks = c("0.5", "1", "2"),
+    labels = function(x) paste0(x, " mg/day")
+  ) +
+  scale_y_continuous(expand = expansion(0), limits = c(0, 30)) +
+  coord_flip() +
+  facet_wrap(supplement ~ ., ncol = 1) +
+  custom_theme("dark")
+```
+
+## This is a horizontal bar plot
+
+```{r}
+#| label: horizontal-bar-plot-2
+#| eval: true
+
+diamonds |>
+  summarize(prop = n() / nrow(diamonds), .by = cut) |>
+  mutate(cut = forcats::fct_reorder(cut, -prop)) |>
+  ggplot(aes(prop, cut)) +
+  geom_col(aes(fill = as.numeric(cut) == 1)) +
+  geom_text(
+    aes(
+      label = paste0("  ", sprintf("%2.1f", prop * 100), "%  "),
+      color = prop > .05,
+      hjust = prop > .05
+    ),
+    size = 4,
+    fontface = "bold",
+    family = "Spline Sans"
+  ) +
+  scale_x_continuous(guide = "none", name = NULL, expand = c(0, 0)) +
+  scale_y_discrete(guide = "none", expand = expansion(add = c(.8, .6))) +
+  scale_fill_manual(values = c("grey50", "#1D785A"), guide = "none") +
+  scale_color_manual(values = c("black", "white"), guide = "none") +
+  facet_wrap(~cut, ncol = 1, scales = "free_y") +
+  custom_theme("light") +
+  theme(
+    axis.title.y = element_blank(),
+    strip.text = element_text(
+      hjust = 0,
+      margin = margin(1, 0, 1, 0),
+      size = rel(1.1),
+      face = "bold"
+    )
+  )
+```
+
+## This is a horizontal bar plot {.dark}
+
+```{r}
+#| label: horizontal-bar-plot-2-dark
+#| eval: true
+
+diamonds |>
+  summarize(prop = n() / nrow(diamonds), .by = cut) |>
+  mutate(cut = forcats::fct_reorder(cut, -prop)) |>
+  ggplot(aes(prop, cut)) +
+  geom_col(aes(fill = as.numeric(cut) == 1)) +
+  geom_text(
+    aes(
+      label = paste0("  ", sprintf("%2.1f", prop * 100), "%  "),
+      color = prop > .05,
+      hjust = prop > .05
+    ),
+    size = 4,
+    fontface = "bold",
+    family = "Spline Sans"
+  ) +
+  scale_x_continuous(guide = "none", name = NULL, expand = c(0, 0)) +
+  scale_y_discrete(guide = "none", expand = expansion(add = c(.8, .6))) +
+  scale_fill_manual(values = c("grey50", "#1D785A"), guide = "none") +
+  scale_color_manual(values = c("black", "white"), guide = "none") +
+  facet_wrap(~cut, ncol = 1, scales = "free_y") +
+  custom_theme("dark") +
+  theme(
+    axis.title.y = element_blank(),
+    strip.text = element_text(
+      hjust = 0,
+      margin = margin(1, 0, 1, 0),
+      size = rel(1.1),
+      face = "bold"
+    )
+  )
+```
+
+## This is **<span style='color:#00a5a6'>green</span>** and that is **<span style='color:#e03d90'>pink</span>**
+
+```{r}
+#| label: vertical-bar-plot
+#| fig-height: 10
+#| fig-width: 15
+
+ggplot(
+  plot_data,
+  aes(x = categorical_dose, y = mean_length, fill = supplement)
+) +
+  geom_bar(aes(alpha = dose), stat = "identity", colour = "#FFFFFF", size = 2) +
+  geom_textbox(
+    data = plot_data,
+    aes(
+      label = paste0(
+        "<span style=font-size:12pt>",
+        dose_label,
+        "</span><br>",
+        janitor::round_half_up(mean_length),
+        "mm"
+      ),
+      vjust = if_else(mean_length < 15, 0, 1),# placing text in the top (0), middle (0.5), bottom (1) top of the bar
+      valign = 1, # no change for this plot
+      hjust = 0.5, # placing text in the left (0), center (0.5), right (1) of the bar
+      halign = 0.5, # align text in the left (0), center (0.5), right (1) top of the bar
+      colour = if_else(
+        mean_length > 15,
+        "#FFFFFF",
+        sd_colors[supplement]
+      )
+    ),
+    size = 6,
+    fill = NA,
+    box.colour = NA,
+    family = "Cabin",
+    fontface = "bold"
+  ) +
+  labs(
+    x = "Dose",
+    y = "Mean length (mm)"
+  ) +
+  scale_fill_manual(values = sd_colors) +
+  scale_alpha(range = c(0.4, 1)) +
+  scale_colour_identity() +
+  scale_x_discrete(
+    breaks = c("0.5", "1", "2"),
+    labels = function(x) paste0(x, " mg/day")
+  ) +
+  scale_y_continuous(expand = expansion(0), limits = c(0, 30)) +
+  facet_wrap(supplement ~ ., nrow = 1) +
+  custom_theme("light")
+```
+
+## This is **<span style='color:#00a5a6'>green</span>** and that is **<span style='color:#e03d90'>pink</span>** {.dark}
+
+```{r}
+#| label: vertical-bar-plot-dark
+#| fig-height: 10
+#| fig-width: 15
+
+ggplot(
+  plot_data,
+  aes(x = categorical_dose, y = mean_length, fill = supplement)
+) +
+  geom_bar(aes(alpha = dose), stat = "identity", colour = "#FFFFFF", size = 2) +
+  geom_textbox(
+    data = plot_data,
+    aes(
+      label = paste0(
+        "<span style=font-size:12pt>",
+        dose_label,
+        "</span><br>",
+        janitor::round_half_up(mean_length),
+        "mm"
+      ),
+      vjust = if_else(mean_length < 15, 0, 1),# placing text in the top (0), middle (0.5), bottom (1) top of the bar
+      valign = 1, # no change for this plot
+      hjust = 0.5, # placing text in the left (0), center (0.5), right (1) of the bar
+      halign = 0.5, # align text in the left (0), center (0.5), right (1) top of the bar
+      colour = if_else(
+        mean_length > 15,
+        "#FFFFFF",
+        sd_colors[supplement]
+      )
+    ),
+    size = 6,
+    fill = NA,
+    box.colour = NA,
+    family = "Cabin",
+    fontface = "bold"
+  ) +
+  labs(
+    x = "Dose",
+    y = "Mean length (mm)"
+  ) +
+  scale_fill_manual(values = sd_colors) +
+  scale_alpha(range = c(0.4, 1)) +
+  scale_colour_identity() +
+  scale_x_discrete(
+    breaks = c("0.5", "1", "2"),
+    labels = function(x) paste0(x, " mg/day")
+  ) +
+  scale_y_continuous(expand = expansion(0), limits = c(0, 30)) +
+  facet_wrap(supplement ~ ., nrow = 1) +
+  custom_theme("dark")
+```
+
+##
+
+```{r}
+#| label: line-plot-data
+set.seed(202501)
+
+many_trees <- Orange |>
+  mutate(Tree = as.character(Tree)) |>
+  rbind(tibble(
+    Tree = c(rep("6", 7), rep("7", 7), rep("8", 7)),
+    age = rep(unique(Orange$age), 3),
+    circumference = c(
+      sort(sample(25:250, 7)),
+      sort(sample(25:250, 7)),
+      sort(sample(25:250, 7))
+    )
+  ))
+```
+
+```{r}
+#| label: line-plot-1
+theme_piccia <- function() {
+  theme_sd_2(base_size = 12) +
+    # Align the font with the rest of the page
+    theme(
+      text = element_text(family = "Noah", colour = "#12051C"),
+      # Make the title the main thing, and make it wrap to the width of the plot
+      # by putting it inside a textbox
+      plot.title = element_textbox_simple(
+        face = "bold",
+        size = rel(1.5),
+        margin = margin(12, 0, 12, 0, "pt")
+      ),
+      axis.text = element_text(family = "Noah", colour = "#372D40"),
+      axis.title = element_blank(),
+      # Give everything a bit more space to breathe
+      plot.margin = margin(rep(12, 4))
+    )
+}
+
+many_trees |>
+  group_by(Tree) |>
+  mutate(
+    total_growth = max(circumference) - min(circumference),
+    orchard = case_when(
+      Tree %in% c("8", "7", "6", "4") ~ "Greenleaf Citrus Farm",
+      TRUE ~ "Purple Horizon Orchards"
+    ),
+    plantation_year = case_when(
+      Tree %in% c("6", "3") ~ 2021,
+      Tree %in% c("4", "2") ~ 2022,
+      Tree %in% c("7", "5") ~ 2023,
+      TRUE ~ 2024
+    )
+  ) |>
+  arrange(plantation_year) |>
+  mutate(Tree = factor(Tree, levels = unique(Tree))) |>
+  ggplot(aes(x = age, y = circumference, colour = orchard, group = Tree)) +
+  geom_line(linewidth = 1.5, alpha = 0.5, colour = "grey") +
+  geom_line(linewidth = 1.5, aes(alpha = plantation_year)) +
+  scale_alpha_continuous(range = c(0.05, 1), transform = "identity") +
+  labs(
+    title = "Charting the increase in tree circumference by age, by orchard and by year"
+  ) +
+  scale_x_continuous(labels = function(x) paste(x, "days")) +
+  scale_y_continuous(labels = function(x) paste(x, "mm"), limits = c(0, 250)) +
+  scale_colour_manual(
+    values = c(
+      "Greenleaf Citrus Farm" = sd_colors[["green"]],
+      "Purple Horizon Orchards" = sd_colors[["purple"]]
+    )
+  ) +
+  geom_textbox(
+    data = head(many_trees, 1),
+    aes(
+      x = 1000,
+      y = 225,
+      label = paste0(
+        "In <span style='color: ",
+        sd_colors[["green"]],
+        "'>**Greenleaf Citrus Farm**</span> the most recently planted tree (the darkest line) saw the most consitent growth..."
+      )
+    ),
+    family = "Noah",
+    size = 4.5,
+    box.colour = NA,
+    fill = NA,
+    colour = "#372D40",
+    width = unit(14, "lines")
+  ) +
+  geom_textbox(
+    data = head(many_trees, 1),
+    aes(
+      x = 1400,
+      y = 85,
+      label = paste0(
+        "... while in <span style='color: ",
+        sd_colors[["purple"]],
+        "'>**Purple Horizon Orchard**</span> we were back to square one."
+      )
+    ),
+    family = "Noah",
+    size = 4.5,
+    box.colour = NA,
+    fill = NA,
+    colour = "#372D40"
+  ) +
+  theme_piccia() +
+  theme(legend.position = "none", legend.title = element_blank())
+```
+
+##
+
+```{r}
+#| label: line-plot-2
+many_trees |>
+  filter(Tree %in% c(1, 3, 7, 8)) |>
+  ggplot(aes(x = age, y = circumference, colour = Tree)) +
+  geom_line(linewidth = 1, alpha = 0.8) +
+  labs(title = "Charting the increase in tree circumference by age") +
+  scale_x_continuous(labels = function(x) paste(x, "days")) +
+  scale_y_continuous(labels = function(x) paste(x, "mm"), limits = c(0, 300)) +
+  scale_colour_manual(values = unname(sd_colors)) +
+  theme_piccia() +
+  theme(legend.position = "none") +
+  geom_textbox(
+    data = dplyr::filter(many_trees, age == max(age) & Tree %in% c(1, 3, 7, 8)),
+    aes(
+      label = Tree,
+      # Hard-coding these for ease; I recommend a different approach
+      # for a more reproducible labelling process!
+      vjust = case_when(Tree == "8" ~ 0, Tree == "3" ~ 0.8, TRUE ~ 0.5)
+    ),
+    family = "Noah",
+    fontface = "bold",
+    hjust = 0,
+    fill = NA,
+    box.colour = NA
+  )
+```
+
+##
+
+```{r}
+#| label: elisa-data
+#| output: false
+
+elisa <- read.csv("data/elisa_tfr_antigen_qc.csv")
+
+summary_qc <- elisa |>
+  group_by(antibody, conc_ug) |>
+  summarise(
+    mean_od450 = mean(od450),
+    se_od450   = sd(od450) / sqrt(n()),
+    .groups    = "drop"
+  )
+
+# helper: fit 4PL and extract EC50 + CI + y_ec50 per antibody
+fit_one_ab <- function(df) {
+  fit <- drm(
+    mean_od450 ~ conc_ug,
+    data = df,
+    fct  = LL.4()
+  )
+
+  ed <- ED(fit, 50, interval = "delta")  # EC50 + CI[web:46][web:55]
+  pars <- coef(fit)
+  # LL.4 parameter order is: b (hill), c (bottom), d (top), e (EC50)[web:41][web:44]
+  bottom <- pars["c:(Intercept)"]
+  top    <- pars["d:(Intercept)"]
+
+  # response at EC50 (midpoint of the curve)
+  y_ec50 <- bottom + (top - bottom) / 2
+
+  tibble(
+    antibody = df$antibody[1],
+    ec50     = ed[1, "Estimate"],
+    ec50_se  = ed[1, "Std. Error"],
+    ec50_low = ed[1, "Lower"],
+    ec50_up  = ed[1, "Upper"],
+    y_ec50   = y_ec50
+  )
+}
+
+ec50_df <- summary_qc |>
+  group_by(antibody) |>
+  group_modify(~ fit_one_ab(.x)) |>
+  ungroup()
+```
+
+```{r}
+#| label: elisa-plot-dark
+
+ec50_label <- ec50_df |>
+  mutate(
+    label = paste0(antibody, ": EC~50~ = ", signif(ec50, 3)),
+    x = 0.001,
+    y = c(0.8, 0.9)
+  )
+
+ggplot(
+  data = summary_qc,
+  aes(x = conc_ug, y = mean_od450, color = antibody, shape = antibody, fill = antibody)
+) +
+  geom_smooth(
+    method = drm,
+    method.args = list(fct = L.4()),
+    se = FALSE,
+    linewidth = 1,
+  ) +
+  geom_errorbar(
+    aes(ymin = mean_od450 - se_od450, ymax = mean_od450 + se_od450),
+    width = 0.1
+  ) +
+  geom_point(
+    size = 5,
+    stroke = 1
+  ) +
+  geom_textbox(
+    data = ec50_label,
+    aes(x, y, label = label),
+    size = 5,
+    face = "bold",
+    width = 0.35,
+    fill = NA,
+    box.color = NA
+  ) +
+  scale_x_log10(labels = scales::label_log()) +
+  scale_y_continuous(limits = c(0, 1), n.breaks = 5, expand = expansion(0)) +
+  scale_shape_manual(values = c(22, 23)) +
+  scale_fill_manual(values = prismatic::clr_lighten(unname(sd_colors), 0.7)) +
+  scale_color_sd_d() +
+  labs(
+    x = "Transferrin receptor 1 (µg), Log",
+    y = "OD~450~, Normalized (Mean ± SE)"
+  ) +
+  custom_theme("light") +
+  theme(legend.position = "none")
+```
+
+## {.dark}
+
+```{r}
+#| label: elisa-plot
+
+ec50_label <- ec50_df |>
+  mutate(
+    label = paste0(antibody, ": EC~50~ = ", signif(ec50, 3)),
+    x = 0.001,
+    y = c(0.8, 0.9)
+  )
+
+ggplot(
+  data = summary_qc,
+  aes(x = conc_ug, y = mean_od450, color = antibody, shape = antibody, fill = antibody)
+) +
+  geom_smooth(
+    method = drm,
+    method.args = list(fct = L.4()),
+    se = FALSE,
+    linewidth = 1,
+  ) +
+  geom_errorbar(
+    aes(ymin = mean_od450 - se_od450, ymax = mean_od450 + se_od450),
+    width = 0.1
+  ) +
+  geom_point(
+    size = 5,
+    stroke = 1
+  ) +
+  geom_textbox(
+    data = ec50_label,
+    aes(x, y, label = label),
+    size = 5,
+    face = "bold",
+    width = 0.35,
+    fill = NA,
+    box.color = NA
+  ) +
+  scale_x_log10(labels = scales::label_log()) +
+  scale_y_continuous(limits = c(0, 1), n.breaks = 5, expand = expansion(0)) +
+  scale_shape_manual(values = c(22, 23)) +
+  scale_fill_manual(values = prismatic::clr_lighten(unname(sd_colors), 0.7)) +
+  scale_color_sd_d() +
+  labs(
+    x = "Transferrin receptor 1 (µg), Log",
+    y = "OD~450~, Normalized (Mean ± SE)"
+  ) +
+  custom_theme("dark") +
+  theme(legend.position = "none")
+```

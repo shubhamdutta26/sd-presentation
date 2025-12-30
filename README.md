@@ -18,7 +18,7 @@ quarto use template shubhamdutta26/sd-presentation
 
 ## Format Options
 
-Use {.dark} to for slides with a dark background.
+Use {.dark} to the slide heading for a dark background.
 
 ## Example
 

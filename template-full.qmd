@@ -5,24 +5,26 @@ format:
 
 #  {background-image="img/1IGT_color.png" background-opacity="0.2"}
 
-[Developing a duobody for<br>treating Alzheimer's disease<br>in squirrel monkeys]{.custom-title}
+#  {background-image="img/1IGT_color.png" background-opacity="0.2"}
+
+[Title for your presentation]{.custom-title}
 
 [Shubham Dutta, Ph.D.]{.custom-author}
 
 <br>
 
-[The Non Human Primate Reagent Resource]{.custom-url-nhprr}
+[Organization]{.custom-url-nhprr}
 
 <br>
 
-[Massbiologics of UMMS]{.custom-url-mbl}
+[Something else]{.custom-url-mbl}
 
 [`r format(Sys.Date(), format="%B %d, %Y")`]{.title-date}
 
 [Background image: [Structure of murine immunoglobulin (1IGT)](http://doi.org/10.2210/pdb1IGT/pdb)]{.custom-aside}
 
 ::: notes
-`r if (format(Sys.time(), "%H") < 12) {   "Good morning" } else {   "Good afternoon" }` everyone. Thank you for the opportunity to present my work here. My name is Shubham Dutta, and I’m excited to share with you a unique and ongoing project where I have developed a duobody for treating Alzheimer’s disease in squirrel monkeys.
+`r if (format(Sys.time(), "%H") < 12) {   "Good morning" } else {   "Good afternoon" }` everyone. Thank you for the opportunity to present my work here.
 :::
 
 ## Welcome

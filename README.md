@@ -18,8 +18,8 @@ quarto use template shubhamdutta26/sd-presentation
 
 ## Format Options
 
-TBD
+Use {.dark} to for slides with a dark background.
 
 ## Example
 
-Here is the source code for a minimal sample document: [template.qmd](template.qmd).
+Here is the source code for a minimal presentation: [template-minimal.qmd](template-minimal.qmd).

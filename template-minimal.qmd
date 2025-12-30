@@ -1,0 +1,78 @@
+---
+format:
+  sd-presentation-revealjs: default
+---
+
+#  {background-image="img/1IGT_color.png" background-opacity="0.2"}
+
+[Title for your presentation]{.custom-title}
+
+[Shubham Dutta, Ph.D.]{.custom-author}
+
+<br>
+
+[Organization]{.custom-url-nhprr}
+
+<br>
+
+[Something else]{.custom-url-mbl}
+
+[`r format(Sys.Date(), format="%B %d, %Y")`]{.title-date}
+
+[Background image: [Structure of murine immunoglobulin (1IGT)](http://doi.org/10.2210/pdb1IGT/pdb)]{.custom-aside}
+
+::: notes
+`r if (format(Sys.time(), "%H") < 12) {   "Good morning" } else {   "Good afternoon" }` everyone. Thank you for the opportunity to present my work here.
+:::
+
+## Welcome
+
+```{r}
+#| label: setup
+#| eval: true
+#| echo: true
+
+library(ggplot2)
+
+sd_colors <- c(
+  green   = "#00a5a6",
+  pink    = "#e03d90",
+  orange  = "#fc6538",
+  purple  = "#6a3ecb",
+  blue    = "#0058dc",
+  brown   = "#a75237"
+)
+```
+
+## Welcome {.dark}
+
+```{r}
+#| label: setup-2
+#| eval: false
+#| echo: true
+
+library(ggplot2)
+
+sd_colors <- c(
+  green   = "#00a5a6",
+  pink    = "#e03d90",
+  orange  = "#fc6538",
+  purple  = "#6a3ecb",
+  blue    = "#0058dc",
+  brown   = "#a75237"
+)
+```
+
+## Agenda
+
+::: {.incremental .highlight-last}
+- thing 1
+- thing 2
+:::
+
+## Agenda {.dark}
+
+::: {.incremental .highlight-last}
+- thing 1
+- thing 2
+:::

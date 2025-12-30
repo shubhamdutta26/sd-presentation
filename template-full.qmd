@@ -5,8 +5,6 @@ format:
 
 #  {background-image="img/1IGT_color.png" background-opacity="0.2"}
 
-#  {background-image="img/1IGT_color.png" background-opacity="0.2"}
-
 [Title for your presentation]{.custom-title}
 
 [Shubham Dutta, Ph.D.]{.custom-author}
